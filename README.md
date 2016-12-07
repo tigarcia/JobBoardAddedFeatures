@@ -8,8 +8,9 @@ Run the following commands in the root of your project directory
 
 1. `bundle install`
 2. `rake db:migrate`
-3. `rails s`
-4. `rspec`  - runs tests
+3. `rake db:seed`
+4. `rails s`
+5. `rspec`  - runs tests
 
 ## Change Log
 
@@ -96,4 +97,68 @@ Applying the `list-inline` style to each list item
   display: inline-block;
   padding: 4px 15px 4px 15px;
 }
+```
+### Capybara Testing
+
+__Gemfile__
+
+Make sure you have the following gems:
+
+```rb
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'capybara'
+end
+```
+
+Make sure to `bundle install`
+
+__terminal__
+
+In the terminal, run:
+
+```sh
+rails generate rspec:install
+```
+
+__spec/features/homepage_spec.rb__
+
+Make sure a folder called `features` exists.  Add a file called `homepage_spec.rb`.  The file could have the following tests:
+
+```rb
+require 'rails_helper'
+
+RSpec.describe 'Job Board Home', type: :feature do
+  before(:each) do
+    visit root_path
+  end
+  
+  it 'should return a 200' do
+    expect(page.status_code).to eq 200
+  end
+  
+  it 'should have a home button' do
+    expect(page).to have_text('Home', minimum: 1)
+  end
+
+  it 'should have an add jobs button' do
+    expect(page).to have_text('Add Job', minimum: 1)
+  end
+
+  describe 'search' do
+    it 'should filter search results based on the search' do
+      j1 = Job.create(title: "Python", description: "abc")
+      j2 = Job.create(title: "Rails", description: "dhh")
+
+      visit root_path(search: "rails")
+
+      expect(page).to have_text("Rails")
+      expect(page).to_not have_text("Python")
+    end
+  end
+ end
+
 ```
