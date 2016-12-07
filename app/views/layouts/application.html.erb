@@ -7,10 +7,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <header class='clearfix'>
+  <header class="clearfix">
     <div class="left-nav">
-      <ul>
+      <ul class="list-inline">
         <li><%= link_to "Home", jobs_path %></li>
+        <li>
+          <%= form_tag({controller: "jobs", action: "index"}, method: "get") do%>
+              <%= text_field_tag(:search, nil, {placeholder: "Search for jobs"}) %>
+          <%end%>
+        </li>
       </ul>
     </div>
     <div class="right-nav">

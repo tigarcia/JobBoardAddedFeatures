@@ -3,8 +3,10 @@ class JobsController < ApplicationController
   def index
     if params[:search]
       @jobs = Job.search(params[:search])
+      @title_text = "Results for #{params[:search]}:"
     else
       @jobs = Job.all
+      @title_text = "Jobs!!"
     end
   end
 
